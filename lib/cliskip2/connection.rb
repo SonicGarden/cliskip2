@@ -12,6 +12,10 @@ module Cliskip2
     # @return [Faraday::Connection]
     def connection options = {}
       connection_options = {
+        :headers => {
+          :accept => 'application/json',
+          :user_agent => user_agent,
+        },
         :url => endpoint
       }
       credentials = {
@@ -23,13 +27,13 @@ module Cliskip2
       @connection ||= Faraday.new(connection_options) do |builder|
         builder.request :oauth, credentials
         builder.response :logger
-        builder.adapter :net_http
+        builder.adapter adapter
       end
     end
 
     def consumer
-      consumer_key = 'IbHHmpWoNk5oXjfZsbL6'
-      consumer_secret = 'CeQvpKGRrzs3V7KIy69RSZFFYBGlUTylZV2Cb8tR'
+#      consumer_key = 'IbHHmpWoNk5oXjfZsbL6'
+#      consumer_secret = 'CeQvpKGRrzs3V7KIy69RSZFFYBGlUTylZV2Cb8tR'
       default_options = {
         :site => endpoint,
         :access_token_path => '/api/oauth/access_token'
@@ -38,17 +42,17 @@ module Cliskip2
     end
 
     def access_token
-      username = 'admin@test.com'
-      password = 'password'
+#      username = 'admin@test.com'
+#      password = 'password'
       @access_token ||= consumer.get_access_token(nil, {}, {
         :x_auth_mode => 'client_auth',
-        :x_auth_username => username,
-        :x_auth_password => password
+        :x_auth_username => xauth_username,
+        :x_auth_password => xauth_password
       })
     end
 
-    def endpoint
-      'http://localhost:3000'
-    end
+#    def endpoint
+#      'http://localhost:3000'
+#    end
   end
 end

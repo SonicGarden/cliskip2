@@ -2,11 +2,25 @@
 require 'cliskip2/connection'
 require 'cliskip2/request'
 require 'cliskip2/user'
+require 'cliskip2/config'
 
 module Cliskip2
   class Client
     include Cliskip2::Connection
     include Cliskip2::Request
+
+    attr_accessor *Config::VALID_OPTIONS_KEYS
+
+    # Initializes a new API object
+    #
+    # @param attrs [Hash]
+    # @return [Cliskip2::Client]
+    def initialize(attrs={})
+      attrs = Cliskip2.options.merge(attrs)
+      Config::VALID_OPTIONS_KEYS.each do |key|
+        instance_variable_set("@#{key}".to_sym, attrs[key])
+      end
+    end
 
     def current_user
       @current_user ||= Cliskip2::User.new
