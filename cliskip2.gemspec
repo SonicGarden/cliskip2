@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.add_dependency 'faraday_middleware', '~> 0.8.7'
+  s.add_dependency 'simple_oauth', '~> 0.1.8'
+  s.add_dependency 'oauth', '~> 0.4'
   s.add_development_dependency('rake')
   s.add_development_dependency('rake-compiler')
   s.add_development_dependency('rspec', '~> 2')
