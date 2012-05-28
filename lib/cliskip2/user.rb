@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+require 'cliskip2/base'
+
 module Cliskip2
-  class User
-    def tenant_id
-      '1'
-    end
+  class User < Cliskip2::Base
+    lazy_attr_reader :tenant_id
   end
 end

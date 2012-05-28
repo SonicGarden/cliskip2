@@ -23,7 +23,8 @@ module Cliskip2
     end
 
     def current_user
-      @current_user ||= Cliskip2::User.new
+      user_attr = get("/api/get_current_user")
+      @current_user ||= Cliskip2::User.new(user_attr['user'])
     end
 
     def get_board_entries params = {}
