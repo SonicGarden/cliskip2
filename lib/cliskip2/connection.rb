@@ -2,6 +2,7 @@
 require 'faraday'
 require 'faraday_middleware'
 require 'oauth'
+require 'cliskip2/request/oauth'
 
 module Cliskip2
   module Connection
@@ -25,7 +26,9 @@ module Cliskip2
         :token_secret    => access_token.secret
       }
       @connection ||= Faraday.new(connection_options) do |builder|
-        builder.request :oauth, credentials
+        builder.request :url_encoded
+        builder.use Cliskip2::Request::Cliskip2OAuth, credentials
+        # builder.request :oauth, credentials
         builder.response :json, :content_type => /\bjson$/
         builder.adapter adapter
       end

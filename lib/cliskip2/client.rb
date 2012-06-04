@@ -30,5 +30,9 @@ module Cliskip2
     def get_board_entries params = {}
       get("/tenants/#{current_user.tenant_id}/board_entries.json", params)
     end
+
+    def post_user params
+      post("/admin/tenants/#{current_user.tenant_id}/users.json", params)
+    end
   end
 end
