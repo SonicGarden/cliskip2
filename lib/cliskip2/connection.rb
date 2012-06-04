@@ -26,10 +26,10 @@ module Cliskip2
         :token_secret    => access_token.secret
       }
       @connection ||= Faraday.new(connection_options) do |builder|
+        builder.response :raise_error
+        builder.response :json
         builder.request :url_encoded
         builder.use Cliskip2::Request::Cliskip2OAuth, credentials
-        # builder.request :oauth, credentials
-        builder.response :json, :content_type => /\bjson$/
         builder.adapter adapter
       end
     end

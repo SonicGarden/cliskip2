@@ -17,6 +17,11 @@ module Cliskip2
       request(:post, path, params, options)
     end
 
+    # Perform an HTTP PUT request
+    def put(path, params={}, options={})
+      request(:put, path, params, options)
+    end
+
   private
 
     # Perform an HTTP request
@@ -26,7 +31,7 @@ module Cliskip2
         case method.to_sym
         when :delete, :get
           request.url(path, params)
-        when :post
+        when :post, :put
           request.path = path
           request.body = params unless params.empty?
         end

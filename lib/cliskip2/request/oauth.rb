@@ -17,6 +17,13 @@ module Cliskip2
         params
       end
       def unescape(s) CGI.unescape s.to_s end
+
+      # Override Faraday::Utils#include_body_params?
+      # oauth(0.4.1)でpostの場合のみbodyをsignature-base-stringに含めているので
+      def include_body_params?(env)
+        # see RFC 5489, section 3.4.1.3.1 for details
+        env[:method] == :post && (!(type = env[:request_headers][CONTENT_TYPE]) or type == TYPE_URLENCODED)
+      end
     end
   end
 end
