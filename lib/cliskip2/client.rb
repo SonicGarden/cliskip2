@@ -29,7 +29,7 @@ module Cliskip2
 
     # Create new user by params
     # @return [Cliskip2::User]
-    def post_user params
+    def create_user params
       user_attr = post("/admin/tenants/#{current_user.tenant_id}/users.json", params)
       Cliskip2::User.new(user_attr['user'])
     end
@@ -37,13 +37,13 @@ module Cliskip2
     # Get the user by params
     # @return [Cliskip2::User]
     def get_user params
-      user_attr = get("/admin/tenants/#{current_user.tenant_id}/users/show_by_params.json", params)
+      user_attr = get("/tenants/#{current_user.tenant_id}/users/show_by_params.json", params)
       Cliskip2::User.new(user_attr['user'])
     end
 
     # Update the user by params
     # @return [Cliskip2::User]
-    def put_user params
+    def update_user params
       user = get_user :email => params[:user][:email]
       user_attr = put("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json", params)
       Cliskip2::User.new(user_attr['user'])

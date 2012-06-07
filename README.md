@@ -22,7 +22,7 @@ A Ruby wrapper for the SKIP2 REST APIs
 
 ### create new user
     client = Cliskip2::Client.new
-    client.post_user :user => {:name => 'hoge', :email => 'hoge@hoge.com'}
+    client.create_user :user => {:name => 'hoge', :email => 'hoge@hoge.com'}
 
 ### get the user by email
     client = Cliskip2::Client.new
@@ -30,4 +30,4 @@ A Ruby wrapper for the SKIP2 REST APIs
 
 ### update the user by email
     client = Cliskip2::Client.new
-    client.put_user :user => {:name => 'foobar', :email => 'hoge@hoge.com'}
+    client.update_user :user => {:name => 'foobar', :email => 'hoge@hoge.com'}
