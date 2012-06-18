@@ -31,3 +31,23 @@ A Ruby wrapper for the SKIP2 REST APIs
 ### update the user by email
     client = Cliskip2::Client.new
     client.update_user :user => {:name => 'foobar', :email => 'hoge@hoge.com'}
+
+### search communities by the community-name
+    client = Cliskip2::Client.new
+    client.search_communities({:search => {:name => 'I love ruby'} })
+
+### get a community member
+    client = Cliskip2::Client.new
+    client.get_community_member(community, {:email => 'hoge@hoge.com'})
+
+### join new member to the community
+    client = Cliskip2::Client.new
+    community = client.search_communities({:search => {:name => 'I love ruby'} }).first
+    user = client.get_user :email => 'hoge@hoge.com'
+    client.join_community(community, user)
+
+### leave the member from the community
+    client = Cliskip2::Client.new
+    community = client.search_communities({:search => {:name => 'I love ruby'} }).first
+    member = client.get_community_member(community, {:email => 'hoge@hoge.com'})
+    client.leave_community(community, member)
