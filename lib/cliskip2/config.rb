@@ -27,6 +27,9 @@ module Cliskip2
     # The value sent in the 'User-Agent' header if none is set
     DEFAULT_USER_AGENT = "Cliskip2 Ruby Gem #{Cliskip2::VERSION}"
 
+    # The proxy server if none is set
+    DEFAULT_PROXY = nil
+
     # An array of valid keys in the options hash when configuring a {Twitter::Client}
     VALID_OPTIONS_KEYS = [
       :adapter,
@@ -36,6 +39,7 @@ module Cliskip2
       :endpoint,
       :xauth_username,
       :xauth_password,
+      :proxy,
       :user_agent
     ]
 
@@ -68,6 +72,7 @@ module Cliskip2
       self.endpoint           = DEFAULT_ENDPOINT
       self.xauth_username     = DEFAULT_XAUTH_USERNAME
       self.xauth_password     = DEFAULT_XAUTH_PASSWORD
+      self.proxy              = DEFAULT_PROXY
       self.user_agent         = DEFAULT_USER_AGENT
       self
     end

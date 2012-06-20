@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Cliskip2::VERSION
   s.authors     = ["Naoki Maeda"]
   s.email       = ["maeda.na@gmail.com"]
-  s.homepage    = "http://wiki.github.com/maedana/cliskip2"
+  s.homepage    = "https://github.com/SonicGarden/cliskip2"
   s.summary     = %q{A Ruby wrapper for the SKIP2 REST APIs}
   s.description = %q{A Ruby wrapper for the SKIP2 REST APIs}
 

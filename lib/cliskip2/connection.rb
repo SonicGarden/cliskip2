@@ -27,7 +27,8 @@ module Cliskip2
         :consumer_key    => consumer.key,
         :consumer_secret => consumer.secret,
         :token           => access_token.token,
-        :token_secret    => access_token.secret
+        :token_secret    => access_token.secret,
+        :proxy => proxy
       }
       @connection ||= Faraday.new(connection_options) do |builder|
         builder.response :raise_error
@@ -41,7 +42,8 @@ module Cliskip2
     def consumer
       default_options = {
         :site => endpoint,
-        :access_token_path => '/api/oauth/access_token'
+        :access_token_path => '/api/oauth/access_token',
+        :proxy => proxy
       }
       @consumer ||= ::OAuth::Consumer.new(consumer_key, consumer_secret, default_options)
     end

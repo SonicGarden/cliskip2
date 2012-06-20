@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cliskip2 (0.0.1)
+    cliskip2 (0.0.3)
       faraday_middleware (~> 0.8.7)
       json (~> 1.7.3)
       oauth (~> 0.4)
