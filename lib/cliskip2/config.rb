@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 require "cliskip2/version"
+require 'logger'
 
 module Cliskip2
   module Config
@@ -30,6 +31,9 @@ module Cliskip2
     # The proxy server if none is set
     DEFAULT_PROXY = nil
 
+    # The logger if none is set
+    DEFAULT_LOGGER = ::Logger.new(STDOUT)
+
     # An array of valid keys in the options hash when configuring a {Twitter::Client}
     VALID_OPTIONS_KEYS = [
       :adapter,
@@ -40,7 +44,8 @@ module Cliskip2
       :xauth_username,
       :xauth_password,
       :proxy,
-      :user_agent
+      :user_agent,
+      :logger
     ]
 
     attr_accessor *VALID_OPTIONS_KEYS
@@ -74,6 +79,7 @@ module Cliskip2
       self.xauth_password     = DEFAULT_XAUTH_PASSWORD
       self.proxy              = DEFAULT_PROXY
       self.user_agent         = DEFAULT_USER_AGENT
+      self.logger             = DEFAULT_LOGGER
       self
     end
   end

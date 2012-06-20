@@ -57,6 +57,47 @@ module Cliskip2
       Cliskip2::User.new(user_attr['user'])
     end
 
+    def sync_users users_csv_path
+      inserted_users_count = 0
+      updated_users_count = 0
+      failed_users_count = 0
+      skipped_users_count = 0
+      logger.info 'Start syncing users...'
+      CSV.foreach(File.expand_path(users_csv_path), :headers => true, :encoding => 'UTF-8') do |row|
+        begin
+          if email = row['email'] and email != ''
+            if user = self.get_user(:email => email)
+              self.update_user :user => {:name => row['name'], :email => email, :section => row['section'], :status => row['status']}
+              logger.info "  Updated email: #{email}"
+              updated_users_count = updated_users_count + 1
+            else
+              self.create_user :user => {:name => row['name'], :email => email, :section => row['section']}
+              logger.info "  Inserted email: #{email}"
+              inserted_users_count = inserted_users_count + 1
+            end
+          else
+            logger.info "  Skipped email: #{email}"
+            skipped_users_count = skipped_users_count + 1
+          end
+        rescue Faraday::Error::ClientError => e
+          logger.error "  Failed email: #{email}"
+          failed_users_count = failed_users_count + 1
+          logger.error e.message
+        rescue => e
+          logger.error "  Failed email: #{email}"
+          failed_users_count = failed_users_count + 1
+          logger.error e
+        end
+      end
+      logger.info 'Finish syncing users...'
+      {
+        :inserted_users_count => inserted_users_count,
+        :updated_users_count => updated_users_count,
+        :failed_users_count => failed_users_count,
+        :skipped_users_count => skipped_users_count
+      }
+    end
+
     # ========================================
     # Community APIs
     # ========================================
