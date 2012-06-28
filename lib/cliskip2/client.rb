@@ -154,7 +154,18 @@ module Cliskip2
     # @return [Array<Cliskip2::Community>]
     def search_members params
       if user_id = params.delete(:user_id)
-        community_participation_attrs = get("/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations.json", params)
+        community_participation_attrs = get("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations.json", params)
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+      else
+        []
+      end
+    end
+
+    # Join some communities by some conditions
+    # @return [Array<Cliskip2::CommunityParticipation>]
+    def join_communities params
+      if user_id = params.delete(:user_id)
+        community_participation_attrs = post("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations/join_communities.json", params)
         community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
       else
         []
