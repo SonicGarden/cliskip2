@@ -83,7 +83,7 @@ module Cliskip2
               inserted_users_count = inserted_users_count + 1
             end
           else
-            log_text = "  Skipped email: #{email}"
+            log_text = "  Skipped to sync users. because of blank-email."
             log_texts << log_text
             logger.info log_text
             skipped_users_count = skipped_users_count + 1
@@ -145,8 +145,8 @@ module Cliskip2
 
     # Leave from the community by the target-community and params
     # @return [Cliskip2::CommunityParticipation]
-    def leave_community community, community_participation
-      community_participation_attr = delete("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations/#{community_participation.id}.json")
+    def leave_community community_participation
+      community_participation_attr = delete("/tenants/#{current_user.tenant_id}/communities/#{community_participation.community_id}/community_participations/#{community_participation.id}.json")
       Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation'])
     end
 
@@ -155,7 +155,7 @@ module Cliskip2
     def search_members params
       if user_id = params.delete(:user_id)
         community_participation_attrs = get("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations.json", params)
-        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation']) }
       else
         []
       end
@@ -166,7 +166,7 @@ module Cliskip2
     def join_communities params
       if user_id = params.delete(:user_id)
         community_participation_attrs = post("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations/join_communities.json", params)
-        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation']) }
       else
         []
       end
@@ -177,7 +177,7 @@ module Cliskip2
     def leave_communities params
       if user_id = params.delete(:user_id)
         community_participation_attrs = delete("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations/leave_communities.json", params)
-        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation']) }
       else
         []
       end
