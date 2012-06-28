@@ -149,5 +149,16 @@ module Cliskip2
       community_participation_attr = delete("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations/#{community_participation.id}.json")
       Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation'])
     end
+
+    # Search communitiy_participatioms by some conditions
+    # @return [Array<Cliskip2::Community>]
+    def search_members params
+      if user_id = params.delete(:user_id)
+        community_participation_attrs = get("/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations.json", params)
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+      else
+        []
+      end
+    end
   end
 end
