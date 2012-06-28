@@ -171,5 +171,16 @@ module Cliskip2
         []
       end
     end
+
+    # Leave from some communities by some conditions
+    # @return [Array<Cliskip2::CommunityParticipation>]
+    def leave_communities params
+      if user_id = params.delete(:user_id)
+        community_participation_attrs = delete("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/community_participations/leave_communities.json", params)
+        community_participation_attrs.map { |community_participation_attr| Cliskip2::CommunityParticipation.new(community_participation_attr) }
+      else
+        []
+      end
+    end
   end
 end
