@@ -21,6 +21,7 @@ module Cliskip2
           :user_agent => user_agent,
         },
         :url => endpoint,
+        :proxy => proxy,
         :ssl => {:verify => false}
       }
       credentials = {

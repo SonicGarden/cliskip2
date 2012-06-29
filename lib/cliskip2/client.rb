@@ -62,57 +62,39 @@ module Cliskip2
       updated_users_count = 0
       failed_users_count = 0
       skipped_users_count = 0
-      log_texts = []
-      log_text = 'Start syncing users...'
-      log_texts << log_text
-      logger.info log_text
+      logger.info 'Start syncing users...'
       CSV.foreach(File.expand_path(users_csv_path), :headers => true, :encoding => 'UTF-8') do |row|
         begin
           if email = row['email'] and email != ''
             if user = self.get_user(:email => email)
               self.update_user :user => {:name => row['name'], :email => email, :section => row['section'], :status => row['status']}
-              log_text = "  Updated email: #{email}"
-              log_texts << log_text
-              logger.info log_text
+              logger.info "  Updated email: #{email}"
               updated_users_count = updated_users_count + 1
             else
               self.create_user :user => {:name => row['name'], :email => email, :section => row['section']}
-              log_text = "  Inserted email: #{email}"
-              log_texts << log_text
-              logger.info log_text
+              logger.info "  Inserted email: #{email}"
               inserted_users_count = inserted_users_count + 1
             end
           else
-            log_text = "  Skipped to sync users. because of blank-email."
-            log_texts << log_text
-            logger.info log_text
+            logger.info "  Skipped to sync users. because of blank-email."
             skipped_users_count = skipped_users_count + 1
           end
         rescue Faraday::Error::ClientError => e
-          log_text = "  Failed email: #{email}"
-          log_texts << log_text
-          logger.error log_text
+          logger.error "  Failed email: #{email}"
           failed_users_count = failed_users_count + 1
-          log_texts << e.message
           logger.error e.message
         rescue => e
-          log_text = "Failed email: #{email}"
-          log_texts << log_text
-          logger.error log_text
+          logger.error "  Failed email: #{email}"
           failed_users_count = failed_users_count + 1
-          log_texts << e.backtrace.join("\n")
           logger.error e
         end
       end
-      log_text = 'Finish syncing users...'
-      log_texts << log_text
-      logger.info log_text
+      logger.info 'Finish syncing users...'
       {
         :inserted_users_count => inserted_users_count,
         :updated_users_count => updated_users_count,
         :failed_users_count => failed_users_count,
-        :skipped_users_count => skipped_users_count,
-        :log_texts => log_texts
+        :skipped_users_count => skipped_users_count
       }
     end
 
