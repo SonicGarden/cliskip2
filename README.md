@@ -32,6 +32,10 @@ A Ruby wrapper for the SKIP2 REST APIs
     client = Cliskip2::Client.new
     client.update_user :user => {:name => 'foobar', :email => 'hoge@hoge.com'}
 
+### delete the user by email
+    client = Cliskip2::Client.new
+    client.delete_user :user => {:email => 'hoge@hoge.com'}
+
 ### search communities by the community-name
     client = Cliskip2::Client.new
     client.search_communities({:search => {:name => 'I love ruby'} })

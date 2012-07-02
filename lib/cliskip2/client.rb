@@ -52,14 +52,27 @@ module Cliskip2
     # Update the user by params
     # @return [Cliskip2::User]
     def update_user params
-      user = get_user :email => params[:user][:email]
-      user_attr = put("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json", params)
-      Cliskip2::User.new(user_attr['user'])
+      if user = get_user(:email => params[:user][:email])
+        user_attr = put("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json", params)
+        Cliskip2::User.new(user_attr['user'])
+      else
+        nil
+      end
+    end
+
+    def delete_user params
+      if user = get_user(:email => params[:user][:email])
+        user_attr = delete("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json")
+        Cliskip2::User.new(user_attr['user'])
+      else
+        nil
+      end
     end
 
     def sync_users users_csv_path
       inserted_users_count = 0
       updated_users_count = 0
+      deleted_users_count = 0
       failed_users_count = 0
       skipped_users_count = 0
       logger.info 'Start syncing users...'
@@ -67,13 +80,24 @@ module Cliskip2
         begin
           if email = row['email'] and email != ''
             if user = self.get_user(:email => email)
-              self.update_user :user => {:name => row['name'], :email => email, :section => row['section'], :status => row['status']}
-              logger.info "  Updated email: #{email}"
-              updated_users_count = updated_users_count + 1
+              if user.status == 'UNUSED' && row['status'] == 'RETIRED'
+                self.delete_user :user => {:email => email}
+                logger.info "  Deleted email: #{email}"
+                deleted_users_count = deleted_users_count + 1
+              else
+                self.update_user :user => {:name => row['name'], :email => email, :section => row['section'], :status => row['status']}
+                logger.info "  Updated email: #{email}"
+                updated_users_count = updated_users_count + 1
+              end
             else
-              self.create_user :user => {:name => row['name'], :email => email, :section => row['section']}
-              logger.info "  Inserted email: #{email}"
-              inserted_users_count = inserted_users_count + 1
+              unless row['status'] == 'RETIRED'
+                self.create_user :user => {:name => row['name'], :email => email, :section => row['section']}
+                logger.info "  Inserted email: #{email}"
+                inserted_users_count = inserted_users_count + 1
+              else
+                logger.info "  Skipped to sync users. because of retired user."
+                skipped_users_count = skipped_users_count + 1
+              end
             end
           else
             logger.info "  Skipped to sync users. because of blank-email."
@@ -93,6 +117,7 @@ module Cliskip2
       {
         :inserted_users_count => inserted_users_count,
         :updated_users_count => updated_users_count,
+        :deleted_users_count => deleted_users_count,
         :failed_users_count => failed_users_count,
         :skipped_users_count => skipped_users_count
       }
