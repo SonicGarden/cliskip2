@@ -145,15 +145,15 @@ module Cliskip2
 
     # Join the community by the target-community and params
     # @return [Cliskip2::CommunityParticipation]
-    def join_community community, user
-      community_participation_attr = post("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations.json", {:community_participation => {:user_id => user.id}})
+    def join_community community, user, params
+      community_participation_attr = post("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations.json", {:community_participation => {:user_id => user.id}}.merge(params)) 
       Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation'])
     end
 
     # Leave from the community by the target-community and params
     # @return [Cliskip2::CommunityParticipation]
-    def leave_community community_participation
-      community_participation_attr = delete("/tenants/#{current_user.tenant_id}/communities/#{community_participation.community_id}/community_participations/#{community_participation.id}.json")
+    def leave_community community_participation, params
+      community_participation_attr = delete("/tenants/#{current_user.tenant_id}/communities/#{community_participation.community_id}/community_participations/#{community_participation.id}.json", params)
       Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation'])
     end
 
