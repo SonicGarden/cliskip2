@@ -40,6 +40,13 @@ module Cliskip2
       Cliskip2::User.new(user_attr['user'])
     end
 
+    # Activate user by params
+    # @return nil
+    def activate_user user_id, params
+      user_attr = get("/admin/tenants/#{current_user.tenant_id}/users/#{user_id}/issue_activation_code.json", params)
+      Cliskip2::User.new(user_attr['user'])
+    end
+
     # Get the user by params
     # @return [Cliskip2::User]
     def get_user params
