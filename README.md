@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/SonicGarden/cliskip2.png)](https://gemnasium.com/SonicGarden/cliskip2)
+
 cliskip2
 ========
 
