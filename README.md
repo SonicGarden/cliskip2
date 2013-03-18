@@ -61,3 +61,12 @@ A Ruby wrapper for the SKIP2 REST APIs
     community = client.search_communities({:search => {:name => 'I love ruby'} }).first
     member = client.get_community_member(community, {:email => 'hoge@hoge.com'})
     client.leave_community(community, member)
+
+
+
+
+
+## Update rubygems
+vi lib/cliskip2/version.rb
+bundle exec rake build
+bundle exec rake release
