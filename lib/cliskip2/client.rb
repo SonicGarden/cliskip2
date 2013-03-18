@@ -67,6 +67,18 @@ module Cliskip2
       end
     end
 
+    # Update the email by params
+    # @return [Cliskip2::User]
+    def update_email current_email, future_email
+      if user = get_user(:email => current_email)
+        params = {:user => {:email => future_email}}
+        user_attr = put("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json", params)
+        Cliskip2::User.new(user_attr['user'])
+      else
+        nil
+      end
+    end
+
     def delete_user params
       if user = get_user(:email => params[:user][:email])
         user_attr = delete("/admin/tenants/#{current_user.tenant_id}/users/#{user.id}.json")
@@ -153,7 +165,7 @@ module Cliskip2
     # Join the community by the target-community and params
     # @return [Cliskip2::CommunityParticipation]
     def join_community community, user, params
-      community_participation_attr = post("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations.json", {:community_participation => {:user_id => user.id}}.merge(params)) 
+      community_participation_attr = post("/tenants/#{current_user.tenant_id}/communities/#{community.id}/community_participations.json", {:community_participation => {:user_id => user.id}}.merge(params))
       Cliskip2::CommunityParticipation.new(community_participation_attr['community_participation'])
     end
 

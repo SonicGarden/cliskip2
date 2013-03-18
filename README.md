@@ -34,6 +34,10 @@ A Ruby wrapper for the SKIP2 REST APIs
     client = Cliskip2::Client.new
     client.update_user :user => {:name => 'foobar', :email => 'hoge@hoge.com'}
 
+### update the email by params_email
+    client = Cliskip2::Client.new
+    client.update_email 'before@hoge.com', 'after@hoge.com'
+
 ### delete the user by email
     client = Cliskip2::Client.new
     client.delete_user :user => {:email => 'hoge@hoge.com'}
