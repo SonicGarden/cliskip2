@@ -4,7 +4,7 @@ require 'faraday_middleware'
 require 'oauth'
 # see oauth-0.4.6/lib/oauth/consumer.rb
 # For using OpenSSL::SSL::VERIFY_NONE
-::OAuth::Consumer::CA_FILE = nil
+#::OAuth::Consumer::CA_FILE = nil
 require 'cliskip2/request/oauth'
 
 module Cliskip2
