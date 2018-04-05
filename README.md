@@ -5,6 +5,8 @@ cliskip2
 
 A Ruby wrapper for the SKIP2 REST APIs
 
+**[Important] It is not maintained now.**
+
 ## Installation
     gem install cliskip2
 
